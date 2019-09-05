@@ -15,24 +15,23 @@ namespace ClientTracker.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public SessionsController(ApplicationDbContext ctx,
-                          UserManager<ApplicationUser> userManager)
-        {
-            _userManager = userManager;
-            _context = ctx;
-        }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
 
-        public SessionsController(ApplicationDbContext context)
+        public SessionsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
         // GET: Sessions
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Sessions.Include(s => s.Client);
+            var user = await GetCurrentUserAsync();
+
+            var applicationDbContext = _context.Sessions
+                .Where(s => s.Client.TherapistId == user.Id)
+                .Include(s => s.Client);
             return View(await applicationDbContext.ToListAsync());
         }
 

@@ -80,7 +80,9 @@ namespace ClientTracker.Controllers
             {
                 return NotFound();
             }
-            ViewData["TherapistId"] = new SelectList(_context.ApplicationUsers, "Id", "FullName");
+            ViewData["TherapistId"] = new SelectList(_context.ApplicationUsers
+                .Where(a => a.RoleId == 2)
+                , "Id", "FullName");
             return View(client);
         }
 
