@@ -42,9 +42,9 @@ else
         @if (@UserManager.GetUserAsync(User).Result.RoleId == 1)
         {
             @foreach (var item in Model)
-            {
+        {
                 @if (item.TherapistId == null)
-                {
+        {
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.FullName)
@@ -61,31 +61,34 @@ else
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
-                }
-            }
+        }
+        }
         }
 
         else
         {
             @foreach (var item in Model)
             {
-                <tr>
+                @if (item.TherapistId == @UserManager.GetUserAsync(User).Result.Id)
+                { 
+                    <tr>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    </td>
-                </tr>
-            }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+             }
         }
-        </tbody>
+    </tbody>
 </table>
 
