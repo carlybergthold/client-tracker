@@ -7,12 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ClientTracker.Data;
 using ClientTracker.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ClientTracker.Controllers
 {
     public class SessionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public SessionsController(ApplicationDbContext ctx,
+                          UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+            _context = ctx;
+        }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
 
         public SessionsController(ApplicationDbContext context)
         {
@@ -46,9 +56,13 @@ namespace ClientTracker.Controllers
         }
 
         // GET: Sessions/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "FullName");
+            var user = await GetCurrentUserAsync();
+
+            ViewData["ClientId"] = new SelectList(_context.Clients
+                .Where(c => c.TherapistId == user.Id), 
+                "Id", "FullName");
             return View();
         }
 
