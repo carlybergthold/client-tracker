@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClientTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190906170352_clientDisorder")]
+    [Migration("20190906190635_clientDisorder")]
     partial class clientDisorder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,8 +86,6 @@ namespace ClientTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DisorderId");
-
                     b.Property<string>("Email")
                         .IsRequired();
 
@@ -111,13 +109,30 @@ namespace ClientTracker.Migrations
                     b.ToTable("Client");
                 });
 
-            modelBuilder.Entity("ClientTracker.Models.Disorder", b =>
+            modelBuilder.Entity("ClientTracker.Models.ClientDisorder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ClientId");
+                    b.Property<int>("ClientId");
+
+                    b.Property<int>("DisorderId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("DisorderId");
+
+                    b.ToTable("ClientDisorder");
+                });
+
+            modelBuilder.Entity("ClientTracker.Models.Disorder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -126,8 +141,6 @@ namespace ClientTracker.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
 
                     b.ToTable("Disorder");
                 });
@@ -274,11 +287,17 @@ namespace ClientTracker.Migrations
                         .HasForeignKey("TherapistId");
                 });
 
-            modelBuilder.Entity("ClientTracker.Models.Disorder", b =>
+            modelBuilder.Entity("ClientTracker.Models.ClientDisorder", b =>
                 {
-                    b.HasOne("ClientTracker.Models.Client")
-                        .WithMany("Disorders")
-                        .HasForeignKey("ClientId");
+                    b.HasOne("ClientTracker.Models.Client", "Client")
+                        .WithMany("ClientDisorders")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ClientTracker.Models.Disorder", "Disorder")
+                        .WithMany("ClientDisorders")
+                        .HasForeignKey("DisorderId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ClientTracker.Models.Session", b =>

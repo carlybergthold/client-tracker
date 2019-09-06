@@ -16,6 +16,7 @@ namespace ClientTracker.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Disorder> Disorders { get; set; }
+        public DbSet<ClientDisorder> ClientDisorders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,6 +24,7 @@ namespace ClientTracker.Data
             modelBuilder.Entity<Client>().ToTable("Client");
             modelBuilder.Entity<ApplicationUser>().ToTable("ApplicationUser");
             modelBuilder.Entity<Disorder>().ToTable("Disorder");
+            modelBuilder.Entity<ClientDisorder>().ToTable("ClientDisorder");
 
             base.OnModelCreating(modelBuilder);
         }

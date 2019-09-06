@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClientTracker.Models
 {
@@ -13,6 +14,7 @@ namespace ClientTracker.Models
         [Required]
 
         public string Description { get; set; }
+        public ICollection<ClientDisorder> ClientDisorders { get; set; }
 
     }
 }
