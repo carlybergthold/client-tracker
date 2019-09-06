@@ -34,6 +34,7 @@ namespace ClientTracker.Controllers
             }
 
             var client = await _context.Clients
+                .Include(c => c.Therapist)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
             {
@@ -83,6 +84,8 @@ namespace ClientTracker.Controllers
             ViewData["TherapistId"] = new SelectList(_context.ApplicationUsers
                 .Where(a => a.RoleId == 2)
                 , "Id", "FullName");
+            ViewData["DisorderId"] = new SelectList(_context.Disorders
+                , "Id", "Name");
             return View(client);
         }
 
