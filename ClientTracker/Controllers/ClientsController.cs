@@ -35,6 +35,7 @@ namespace ClientTracker.Controllers
 
             var client = await _context.Clients
                 .Include(c => c.Therapist)
+                .Include(d => d.ClientDisorders)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
             {
@@ -68,6 +69,17 @@ namespace ClientTracker.Controllers
             return View(client);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async void CreateDisorder([Bind("Id,ClientId,DisorderId")] ClientDisorder clientDisorder)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(clientDisorder);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,7 +96,7 @@ namespace ClientTracker.Controllers
             ViewData["TherapistId"] = new SelectList(_context.ApplicationUsers
                 .Where(a => a.RoleId == 2)
                 , "Id", "FullName");
-            ViewData["DisorderId"] = new SelectList(_context.Disorders
+            ViewData["ClientDisorders"] = new SelectList(_context.Disorders
                 , "Id", "Name");
             return View(client);
         }
@@ -96,6 +108,8 @@ namespace ClientTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Notes,TherapistId")] Client client)
         {
+            CreateDisorder(client.ClientDisorders);
+
             if (id != client.Id)
             {
                 return NotFound();
@@ -122,6 +136,7 @@ namespace ClientTracker.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TherapistId"] = new SelectList(_context.ApplicationUsers, "Id", "FullName");
+            ViewData["ClientDisorders"] = new SelectList(_context.Disorders, "Id", "Name");
             return View(client);
         }
 

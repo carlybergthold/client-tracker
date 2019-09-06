@@ -23,8 +23,7 @@ namespace ClientTracker.Models
         public ApplicationUser Therapist { get; set; }
         [Display(Name = "Name")]
         public string FullName => $"{FirstName} {LastName}";
-        public int DisorderId { get; set; }
-        public ICollection<Disorder> Disorders { get; set; }
+        public ICollection<ClientDisorder> ClientDisorders { get; set; }
 
     }
 }
