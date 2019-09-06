@@ -20,9 +20,19 @@ namespace ClientTracker.Controllers
         }
 
         // GET: Disorders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Disorders.ToListAsync());
+            var disorders = from d in _context.Disorders
+                           select d;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                disorders = disorders.Where(d => d.Name.Contains(searchString)
+                || d.Description.Contains(searchString));
+            }
+
+            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "FullName");
+            return View(await disorders.ToListAsync());
         }
 
         // GET: Disorders/Details/5
