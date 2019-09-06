@@ -108,8 +108,6 @@ namespace ClientTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Notes,TherapistId")] Client client)
         {
-            CreateDisorder(client.ClientDisorders);
-
             if (id != client.Id)
             {
                 return NotFound();
