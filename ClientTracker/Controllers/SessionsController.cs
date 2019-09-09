@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ClientTracker.Data;
 using ClientTracker.Models;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClientTracker.Controllers
 {
@@ -72,6 +73,10 @@ namespace ClientTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SessionDate,ClientId")] Session session)
         {
+            if(session.SessionDate < DateTime.Now)
+            {
+                ModelState.AddModelError("Error", "This date is in the past.");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(session);
