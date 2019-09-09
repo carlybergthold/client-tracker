@@ -6,7 +6,6 @@
 
 <h1>Edit</h1>
 
-<h4>Client</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -33,10 +32,10 @@
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="ClientDisorders" class="control-label">Add Possible Diagnoses</label>
                 <select asp-for="ClientDisorders" class="form-control" asp-items="ViewBag.ClientDisorders"><option disabled selected>Select</option></select>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="Notes" class="control-label"></label>
                 <input asp-for="Notes" class="form-control" />

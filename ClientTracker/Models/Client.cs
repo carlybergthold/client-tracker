@@ -15,8 +15,10 @@ namespace ClientTracker.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
+        [Phone]
         public string Phone { get; set; }
         public string Notes { get; set; }
         public string TherapistId { get; set; }
